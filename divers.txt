@@ -1,0 +1,11 @@
+Je trouve que cette commande n'est pas très utilisée mais elle est très puissante. Comment faire pour rechercher un texte alors qu'on ne connait pas le fichier d'où il provient ?
+
+C'est simple. Il faut utiliser la commande grep. Si tous les fichiers sont dans le même répertoire, pour rechercher la chaîne "montexte", il suffit de faire :
+
+Explications :
+
+find . => rechercher à partir du répertoire courant
+-type f => on cherche un fichier
+-exec => on execute une commande à chaque fichier trouvé
+grep montexte {} => on recherche "montexte" dans les fichiers ( {} remplace le nom des fichiers trouvés).
+\; => fin de l'option exec ( \ permet d'ajouter à la suite d'autres commandes)
