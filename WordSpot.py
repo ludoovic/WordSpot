@@ -1,83 +1,64 @@
-import sys
+# todo gérer les autres format
+# todo ne pas faire de print mais spot doit retourner un dictionnaire
+# todo créer un serveur flask qui affiche le dictionnaire retourné dans une page html
+import csv
+import numpy as np
+import pandas as pd
+import PyPDF2 as p2
 
-from tika import parser
-from PySide2.QtCore import  Qt
-from PySide2.QtWidgets import QLabel, QApplication, QFileDialog, QLineEdit, QWidget, QSizePolicy,QMainWindow
-
-from ui_RadarWords import Ui_MainWindow
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super(MainWindow, self).__init__()
-        self.ui = Ui_mainWindow()
-        self.ui.setupUi(self)
-
-        # self.ui.tableView # déplacer les fichiers dans la tableView(self.putCV)
-        #
-        # self.ui.lineEdit.clicked.connect(self.Search)
-        #
-        # self.ui.Search.clicked.connect(self.tableView)
-        #
-        #clear avec le pushbutton Search (valueChange.connect)
-        #
-        # self.updateTableView()
-
-# trouver un moyen (tika) pour rechercher un mot dans tous les fichiers selectionné (pdf,xls,txt, doc)
-#
-# def updateTable(self):
-#     self.ui.tableView.setColumnCount(2)
-
-# Dans la table view les cv se place dans l'ordre croissant (suivant count)
-
-
-def spot(filesname, indexwords):
+def spot(filename, indexwords):
+    # si le fichier est un fichier txt alors
     try:
-        file = open(filesname, "r")
+        file = open(filename, "r")
         read = file.readlines()
-# déplacer les fichiers dans la tableView (filesname)
-# Dans la line edit taper le mot rechercher (indexwords) dans tous les fichiers placé ds la tableView
-#
-
         for word in indexwords:
             lower = word.lower()
             count = 0
-# faire un lower ds tous les fichiers
             for sentance in read:
                 line = sentance.split()
-# "simplifier" les mots des fichiers
                 for each in line:
                     line2 = each.lower()
                     line2 = line2.strip("'#{[|`,^")
                     if lower == line2:
                         count += 1
-            print(lower, " : ", count)
-# quand on click sur Search .../
-# remplacer les fichiers de la tableview par les bon CV, 1 fois les "indewords" trouver ( "nom.CV" | indexwords : 3(
-    # "count")
+            print(f"Le mot '{lower}' a été trouvé {count} fois dans le fichier {filename}")
     except FileNotFoundError:
         print("Désole, ce fichier n'existe pas !")
     except Exception as e:
         print(e)
-
     else:
         print(file.read())
         file.close()
     finally:
         print("Recherche effectué !")
 
-spot("divers.txt", ["fichier"])
+    # sinon si le fichier est un fichier csv alors (DictReader de pandas)
+    elif:
+        filename = "".csv
+        with open('filename.csv', 'r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        return spot()
 
-# file = 'path/to/file'
-# # Parse date from file
-# file_data = parser.from_title(file)
-# # get files text content
-# text = file_data['content']
-# print(text)
+    # sinon si le fichier est un fichier doc alors
+    elif:
+        filename = .doc
+        excel_files = ['filename.xlsx']:
+        for each_excel_file in excel_files:
+            df = pd.read_excel(each_excel_file)
+            return spot()
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    # sinon si le fichier est un fichier pdf alors (import PyPDF2 as p2 pour p2.PdfFileReader)
+    elif:
+        PDFfile = open ('///.pdf', 'rb')
+        pdfread = p2.PdfFileReader(PDFfile)
+        #Extraire une page
+        x = pdfread.getPage(0)
+        x.extractText(spot(filename, listWords))
 
-    window = MainWindow()
-    window.show()
+    # sinon fichier invalide
 
-    sys.exit(app.exec_())
+
+listWords = ["partir", "fichier"]
+listFilenames = ["divers.txt", "divers2.txt"]
+for filename in listFilenames:
+    spot(filename, listWords)
