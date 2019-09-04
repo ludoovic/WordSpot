@@ -33,30 +33,24 @@ def spot(filename, indexwords):
         print("Recherche effectué !")
 
     # sinon si le fichier est un fichier csv alors (DictReader de pandas)
-    elif:
-        filename = "".csv
+    if filename == (str).csv:
         with open('filename.csv', 'r') as csv_file:
-        csv_reader = csv.DictReader(csv_file)
+            csv_reader = csv.DictReader(csv_file)
         return spot()
 
     # sinon si le fichier est un fichier doc alors
-    elif:
-        filename = .doc
-        excel_files = ['filename.xlsx']:
+    elif filename == (str).doc:
+        excel_files = ['filename.xlsx']
         for each_excel_file in excel_files:
             df = pd.read_excel(each_excel_file)
             return spot()
 
     # sinon si le fichier est un fichier pdf alors (import PyPDF2 as p2 pour p2.PdfFileReader)
-    elif:
-        PDFfile = open ('///.pdf', 'rb')
-        pdfread = p2.PdfFileReader(PDFfile)
-        #Extraire une page
-        x = pdfread.getPage(0)
+    else:
+        PDFfileObj = open("2018_CV Charte Ludovic GACHET.pdf", 'rb')
+        pdfreader = p2.PdfFileReader(PDFfileObj)
+        x = pdfreader.getPage(0)
         x.extractText(spot(filename, listWords))
-
-    # sinon fichier invalide
-
 
 listWords = ["partir", "fichier"]
 listFilenames = ["divers.txt", "divers2.txt"]
