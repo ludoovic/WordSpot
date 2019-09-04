@@ -9,3 +9,4 @@ find . => rechercher à partir du répertoire courant
 -exec => on execute une commande à chaque fichier trouvé
 grep montexte {} => on recherche "montexte" dans les fichiers ( {} remplace le nom des fichiers trouvés).
 \; => fin de l'option exec ( \ permet d'ajouter à la suite d'autres commandes)
+python is superpower

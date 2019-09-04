@@ -1,14 +1,27 @@
 # todo gérer les autres format
 # todo ne pas faire de print mais spot doit retourner un dictionnaire
 # todo créer un serveur flask qui affiche le dictionnaire retourné dans une page html
+# todo (API rest)
 import csv
 import numpy as np
 import pandas as pd
 import PyPDF2 as p2
+from flask import Flask
+import os
+
+app = Flask(__name__)
+app.secret_key = 'sdfghjkl'
+
+
+@app.route('/keyword/')
+def WordSpot():
+    return "bon j'avance doucemment mais il faut trouver comment extraire des mots dans un PDF !"
 
 def spot(filename, indexwords):
     # si le fichier est un fichier txt alors
     try:
+        print(filename)
+        extirper = filename.split(".")[-1]
         file = open(filename, "r")
         read = file.readlines()
         for word in indexwords:
@@ -32,27 +45,35 @@ def spot(filename, indexwords):
     finally:
         print("Recherche effectué !")
 
+
     # sinon si le fichier est un fichier csv alors (DictReader de pandas)
-    if filename == (str).csv:
+    if extirper == "csv":
         with open('filename.csv', 'r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
         return spot()
 
     # sinon si le fichier est un fichier doc alors
-    elif filename == (str).doc:
-        excel_files = ['filename.xlsx']
+    elif extirper == "docx":
+        excel_files = ['mots cles.docx']
         for each_excel_file in excel_files:
             df = pd.read_excel(each_excel_file)
             return spot()
 
     # sinon si le fichier est un fichier pdf alors (import PyPDF2 as p2 pour p2.PdfFileReader)
+    elif extirper == "pdf":
+        with open(filename, 'rb') as PDFfileObj:
+            pdfreader = p2.PdfFileReader(PDFfileObj)
+            x = pdfreader.getPage(0)
+            x.extractText()
     else:
-        PDFfileObj = open("2018_CV Charte Ludovic GACHET.pdf", 'rb')
-        pdfreader = p2.PdfFileReader(PDFfileObj)
-        x = pdfreader.getPage(0)
-        x.extractText(spot(filename, listWords))
+        print("extention pas gerer")
 
-listWords = ["partir", "fichier"]
-listFilenames = ["divers.txt", "divers2.txt"]
+
+listWords = ["python", "fichier"]
+listFilenames = ["divers.txt", "cv mbakhane.pdf"]
 for filename in listFilenames:
     spot(filename, listWords)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
