@@ -1,30 +1,74 @@
-# todo gérer les autres format
+# todo gérer format docx
 # todo ne pas faire de print mais spot doit retourner un dictionnaire
-# todo créer un serveur flask qui affiche le dictionnaire retourné dans une page html
-# todo (API rest)
-import csv
-import numpy as np
-import pandas as pd
-import PyPDF2 as p2
-from flask import Flask
+# todo créer un serveur flask qui affiche le dictionnaire retourné dans une page html utiliser le tuto da gerald
+# todo mettre flask dans un autre fichier py
+
+import PyPDF2
+import textract
 import os
-
-app = Flask(__name__)
-app.secret_key = 'sdfghjkl'
+import docxpy
 
 
-@app.route('/keyword/')
-def WordSpot():
-    return "bon j'avance doucemment mais il faut trouver comment extraire des mots dans un PDF !"
+def spot(filename, listWords):
+    extirper = filename.split(".")[-1]
 
-def spot(filename, indexwords):
-    # si le fichier est un fichier txt alors
+    # sinon si le fichier est un fichier docx alors
+    if extirper == "docx":
+        print(f"{filename} est un docx")
+
+        text = docxpy.process(filename, "CVs/data.txt")
+
+        # if you want the hyperlinks
+        doc = docxpy.DOCReader(file)
+        doc.process(filename, "CVs/data.txt")
+
+        with open("CVs/data.txt", "w") as fichier:
+            for line in text:
+                fichier.write(line)
+        searchText(listWords)
+
+####################################################
+    elif extirper == "pdf":
+        try:
+            pdfFileObj = open(filename, 'rb')
+            pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+            # discerning the number of pages will allow us to parse through all #the pages
+            num_pages = pdfReader.numPages
+            count = 0
+            text = ""
+            # The while loop will read each page
+            while count < num_pages:
+                pageObj = pdfReader.getPage(count)
+                count += 1
+                text += pageObj.extractText()
+            if text != "":
+                text = text
+            else:
+                text = textract.process(fileurl, method='tesseract', language='eng')
+
+            with open("CVs/data.txt", "w") as fichier:
+                for line in text:
+                    fichier.write(line)
+            searchText(listWords)
+        except:
+            print(f"erreur de lecture du fichier {filename}")
+#####
+    elif extirper == "html":
+        with open(filename, "r") as rfichier:
+            text = rfichier.read()
+        with open("CVs/data.txt", "w") as fichier:
+            for line in text:
+                fichier.write(line)
+        searchText(listWords)
+    else:
+        print("extention de fichier non gérée")
+
+def searchText(listWords):
+
     try:
-        print(filename)
-        extirper = filename.split(".")[-1]
-        file = open(filename, "r")
+        file = open("CVs/data.txt", "r")
         read = file.readlines()
-        for word in indexwords:
+        for word in listWords:
             lower = word.lower()
             count = 0
             for sentance in read:
@@ -45,35 +89,10 @@ def spot(filename, indexwords):
     finally:
         print("Recherche effectué !")
 
-
-    # sinon si le fichier est un fichier csv alors (DictReader de pandas)
-    if extirper == "csv":
-        with open('filename.csv', 'r') as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-        return spot()
-
-    # sinon si le fichier est un fichier doc alors
-    elif extirper == "docx":
-        excel_files = ['mots cles.docx']
-        for each_excel_file in excel_files:
-            df = pd.read_excel(each_excel_file)
-            return spot()
-
-    # sinon si le fichier est un fichier pdf alors (import PyPDF2 as p2 pour p2.PdfFileReader)
-    elif extirper == "pdf":
-        with open(filename, 'rb') as PDFfileObj:
-            pdfreader = p2.PdfFileReader(PDFfileObj)
-            x = pdfreader.getPage(0)
-            x.extractText()
-    else:
-        print("extention pas gerer")
-
-
-listWords = ["python", "fichier"]
-listFilenames = ["divers.txt", "cv mbakhane.pdf"]
+listWords = ["e-mail", "adresse","email"]
+listFilenames = os.listdir('CVs/')
 for filename in listFilenames:
+    filename = "CVs/" + filename
+    print(filename)
     spot(filename, listWords)
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
