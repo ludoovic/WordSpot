@@ -8,26 +8,22 @@ import textract
 import os
 import docxpy
 
-
 def spot(filename, listWords):
     extirper = filename.split(".")[-1]
 
-    # sinon si le fichier est un fichier docx alors
     if extirper == "docx":
-        print(f"{filename} est un docx")
+        try:
+            doc = docxpy.DOCReader(filename)
+            doc.process()
+            text = doc.data['document'].replace('\n', '')
 
-        text = docxpy.process(filename, "CVs/data.txt")
+            with open("CVs/data.txt", "w") as fichier:
+                for line in text:
+                    fichier.write(line)
+            searchText(listWords)
+        except:
+            print(f"erreur de lecture du fichier {filename}")
 
-        # if you want the hyperlinks
-        doc = docxpy.DOCReader(file)
-        doc.process(filename, "CVs/data.txt")
-
-        with open("CVs/data.txt", "w") as fichier:
-            for line in text:
-                fichier.write(line)
-        searchText(listWords)
-
-####################################################
     elif extirper == "pdf":
         try:
             pdfFileObj = open(filename, 'rb')
