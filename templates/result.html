@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for li in list %}
+        {% for dict in li %}
+            Fichier {{ dict.nom }} : {{ dict.mot }} trouvé {{ dict.occur }} fois <br>
+        {% endfor %}
+    {% endfor %}
+</body>
+</html>
