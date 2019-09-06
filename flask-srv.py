@@ -6,15 +6,20 @@ import docxpy
 
 
 def spot(filename, listWords):
-    extirper = filename.split(".")[-1]
+    """ The fonction spot convert the extracted data & stock the data extract in txt file CVs.txt ;
+    listWords in this fonction transit the request to the fonction def searchText"""
 
-    # si le fichier est un fichier docx alors
+    extirper = filename.split(".")[-1]
+    #   extirper est une variable qui sépare le nom du fichier avec le . & ne garde que l'extention.
+    #   boucle if pour extraire des données d'un fichier docx
+
     if extirper == "docx":
         try:
             doc = docxpy.DOCReader(filename)
             doc.process()
+    # l'import de docxpy utilise DCOreader pour extraire les données en txt
             text = doc.data['document'].replace('\n', '')
-
+    # les données sont placé dans le dossier CVs/data.txt | puis ouvert (ci-dessous)
             with open("CVs/data.txt", "w") as fichier:
                 for line in text:
                     fichier.write(line)
@@ -24,16 +29,16 @@ def spot(filename, listWords):
             print(f"erreur de lecture du fichier {filename}")
             return []
 
-####################################################
+    # boucle elif pour extraire des données d'un fichier PDF
     elif extirper == "pdf":
         try:
             pdfFileObj = open(filename, 'rb')
             pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-            # discerning the number of pages will allow us to parse through all #the pages
+    # discerner le nombre de pages permet de 'parse' toutes les pages
             num_pages = pdfReader.numPages
             count = 0
             text = ""
-            # The while loop will read each page
+    # la boucle while va lire chaque page
             while count < num_pages:
                 pageObj = pdfReader.getPage(count)
                 count += 1
@@ -42,16 +47,18 @@ def spot(filename, listWords):
                 text = text
             else:
                 text = textract.process(fileurl, method='tesseract', language='eng')
-
+    # preciser fileURL: initialise & retourne un nouveau NSURL object comme file URL avec un (specified path components)
             with open("CVs/data.txt", "w") as fichier:
                 for line in text:
                     fichier.write(line)
             returnedSearch = searchText(listWords, filename)
             return returnedSearch
+
         except:
             print(f"erreur de lecture du fichier {filename}")
             return []
-#####
+
+    # boucle if pour extraire des données d'un fichier HTML
     elif extirper == "html":
         with open(filename, "r") as rfichier:
             text = rfichier.read()
@@ -65,8 +72,8 @@ def spot(filename, listWords):
         return []
 
 
-
 def searchText(listWords, filename):
+    """ This fonction allow to extract all the words in CVs/data.txt """
     listDico = []
 
     try:
@@ -95,7 +102,8 @@ def searchText(listWords, filename):
         return listDico
 
 def foncPrincipale():
-    listWords = ["e-mail", "adresse", "email", "outils"]
+    """ This fonction allow to select the words searched in CVs/data.txt"""
+    listWords = ["python", "logistique", "voiture", "outils"]
     listFilenames = os.listdir('CVs/')
     listReturn = []
     for filename in listFilenames:
