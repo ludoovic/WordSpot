@@ -1,7 +1,5 @@
-# todo gérer format docx
-# todo ne pas faire de print mais spot doit retourner un dictionnaire
+
 # todo créer un serveur flask qui affiche le dictionnaire retourné dans une page html utiliser le tuto da gerald
-# todo mettre flask dans un autre fichier py
 
 import PyPDF2
 import textract
@@ -23,16 +21,17 @@ def spot(filename, listWords):
             searchText(listWords)
         except:
             print(f"erreur de lecture du fichier {filename}")
+######
 
     elif extirper == "pdf":
         try:
             pdfFileObj = open(filename, 'rb')
             pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-            # discerning the number of pages will allow us to parse through all #the pages
+
             num_pages = pdfReader.numPages
             count = 0
             text = ""
-            # The while loop will read each page
+
             while count < num_pages:
                 pageObj = pdfReader.getPage(count)
                 count += 1
@@ -48,7 +47,8 @@ def spot(filename, listWords):
             searchText(listWords)
         except:
             print(f"erreur de lecture du fichier {filename}")
-#####
+######        ######
+
     elif extirper == "html":
         with open(filename, "r") as rfichier:
             text = rfichier.read()
@@ -59,7 +59,9 @@ def spot(filename, listWords):
     else:
         print("extention de fichier non gérée")
 
+
 def searchText(listWords):
+
 
     try:
         file = open("CVs/data.txt", "r")
@@ -74,7 +76,7 @@ def searchText(listWords):
                     line2 = line2.strip("'#{[|`,^")
                     if lower == line2:
                         count += 1
-            print(f"Le mot '{lower}' a été trouvé {count} fois dans le fichier {filename}")
+            print(f" |\t '{lower   }'  |\t {count    }   |\t {filename    }")
     except FileNotFoundError:
         print("Désole, ce fichier n'existe pas !")
     except Exception as e:
@@ -85,10 +87,11 @@ def searchText(listWords):
     finally:
         print("Recherche effectué !")
 
-listWords = ["e-mail", "adresse","email"]
+listWords = ["logiciel", "contact","diplome"]
 listFilenames = os.listdir('CVs/')
 for filename in listFilenames:
     filename = "CVs/" + filename
     print(filename)
     spot(filename, listWords)
+
 
