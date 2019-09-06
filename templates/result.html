@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>WorsdSpot</title>
 </head>
 <body>
     {% for li in list %}
         {% for dict in li %}
-            Fichier {{ dict.nom }} : {{ dict.mot }} trouvé {{ dict.occur }} fois <br>
+        <pre>     Fichier  |       {{ dict.nom        }}     |   {{ dict.mot }} trouvé      |     {{ dict.occur }} fois <br> </pre>
         {% endfor %}
     {% endfor %}
 </body>
