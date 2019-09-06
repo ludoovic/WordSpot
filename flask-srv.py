@@ -1,3 +1,7 @@
+# TODO : faire fonctionner pour doc
+# TODO : corriger le problème de charmap
+# TODO : permettre à l'utilisateur d'entrer les mots clés recherché via un formulaire web
+
 from flask import Flask, render_template
 import PyPDF2
 import textract
@@ -6,11 +10,11 @@ import docxpy
 
 
 def spot(filename, listWords):
-    """ The fonction spot convert the extracted data & stock the data extract in txt file CVs.txt ;
-    listWords in this fonction transit the request to the fonction def searchText"""
+    """ The fonction spot return a number of occur of searched words ;
+    listWords in this fonction, transit the request to the fonction def searchText"""
 
     extirper = filename.split(".")[-1]
-    #   extirper est une variable qui sépare le nom du fichier avec le . & ne garde que l'extention.
+    #   extirper est une variable qui sépare le nom du fichier avec le . & ne garde que l'extension.
     #   boucle if pour extraire des données d'un fichier docx
 
     if extirper == "docx":
@@ -47,7 +51,7 @@ def spot(filename, listWords):
                 text = text
             else:
                 text = textract.process(fileurl, method='tesseract', language='eng')
-    # preciser fileURL: initialise & retourne un nouveau NSURL object comme file URL avec un (specified path components)
+
             with open("CVs/data.txt", "w") as fichier:
                 for line in text:
                     fichier.write(line)
@@ -102,7 +106,7 @@ def searchText(listWords, filename):
         return listDico
 
 def foncPrincipale():
-    """ This fonction allow to select the words searched in CVs/data.txt"""
+    """ This fonction allow to select the words searched in files in folder CVs"""
     listWords = ["python", "logistique", "voiture", "outils"]
     listFilenames = os.listdir('CVs/')
     listReturn = []
@@ -117,7 +121,7 @@ app = Flask(__name__)
 def index():
     listOfListReturn = foncPrincipale()
     print(listOfListReturn)
-    # return listOfListReturn[0][0]
+
     return render_template("result.html", list=listOfListReturn)
 
 if __name__ == '__main__':
